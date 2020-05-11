@@ -75,6 +75,7 @@ bool insertElemList(LIST* l, REGISTER reg, int i) {
 bool deleteElemList(KEYTYPE ch, LIST* l) {
   int pos, j;
   pos = searchKeyList(l, ch);
+  
   if (pos == -1) return false;
   
   for (j = pos; j < l->nroElem-1; j++)
@@ -83,6 +84,19 @@ bool deleteElemList(KEYTYPE ch, LIST* l) {
   l->nroElem--;
   return true;
 }
+
+bool deleteElemListWithBinarySearch(LIST* l, KEYTYPE ch) {
+  int pos, j;
+  pos = binarySearch(l, ch);
+
+  if (pos == -1) return false;
+
+  for (j = pos; j < l->nroElem -1; j++)
+    l->A[j] = l->A[j+1];
+
+  l->nroElem--;
+  return true;
+}  
 
 void restartList(LIST *l) {
   l->nroElem = 0;
