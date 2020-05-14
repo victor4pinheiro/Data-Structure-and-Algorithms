@@ -9,17 +9,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <malloc.h>
 
 int main(void)
 {
     DIR* dirp;
     struct dirent* direntp;
-    char customDir[80];
+    char* userResponse = (char*) malloc(sizeof(char));
 
     printf("What is the path you want to search?");
-    scanf("%s", customDir);
+    scanf("%s", userResponse);
 
-    dirp = opendir(customDir);
+    dirp = opendir(userResponse);
     if (dirp == NULL) {
         perror( "Can't open path to dir" );
     } else {
