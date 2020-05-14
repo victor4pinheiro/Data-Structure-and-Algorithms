@@ -14,8 +14,12 @@ int main(void)
 {
     DIR* dirp;
     struct dirent* direntp;
+    char customDir[80];
 
-    dirp = opendir("/path/to/dir/");
+    printf("What is the path you want to search?");
+    scanf("%s", customDir);
+
+    dirp = opendir(customDir);
     if (dirp == NULL) {
         perror( "Can't open path to dir" );
     } else {
