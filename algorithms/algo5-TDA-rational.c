@@ -15,73 +15,68 @@
 
 #include <stdio.h>
 
-int gcd(int n, int m)
+typedef struct ratio{
+    int N;
+    int D;
+} ratio;
+
+int commomDivisor(int numerator, int denominator)
 {
     int gcd, remainder;
 
-    while (n != 0)
-    {
-        remainder = m % n;
-        m = n;
-        n = remainder;
+    while (numerator != 0) {
+        remainder = denominator % numerator;
+        denominator = numerator;
+        numerator = remainder;
     }
 
-    gcd = m;
-
+    gcd = denominator;
     return gcd;
+}
+
+ratio simplifyRatio(ratio r)
+{
+    int resultCD = commomDivisor(r.N, r.D);
+
+    r.N = r.N / resultCD;
+    r.D = r.D / resultCD;
+    
+    return r;
 }
 
 int main()
 {
-    int N; // Amount of cases of test that must be read
-    int X[2];
-    int Y[2];
-    int i;
+    int N, i;
     char operator;
+    ratio R1, R2, R3, result;
+    scanf("%d", &N);
 
-    scanf("%i", &N);
+    for (i = 0; i < N; ++i) {
+        scanf("%d / %d %c %d / %d", &R1.N, &R1.D, &operator, &R2.N, &R2.D);
 
-    int number1, number2, newNumerator, newDenominator;
-
-    for (i = 0; i < N; i++) {
-        scanf("%i / %i %c %i / %i", &X[0], &X[1], &operator, &Y[0], &Y[1]);
-
-        switch (operator)
-        {
+        switch (operator) {
             case '+':
-                number1 = X[0]*Y[1] + Y[0]*X[1];
-                number2 = X[1]*Y[1];
-                newNumerator = number1 / gcd(number1, number2);
-                newDenominator = number2 / gcd(number1, number2);
-                printf("%i/%i = %i/%i\n", number1, number2, newNumerator, newDenominator);
+                R3.N = R1.N * R2.D + R2.N * R1.D;
+                R3.D = R1.D * R2.D;
                 break;
-
+            
             case '-':
-                number1 = X[0]*Y[1] - X[1]*Y[0];
-                number2 = X[1] * Y[1];
-                newNumerator = number1 / gcd(number1, number2);
-                newDenominator = number2 / gcd(number1, number2);
-                printf("%i/%i = %i/%i\n", number1, number2, newNumerator, newDenominator);
+                R3.N = R1.N * R2.D - R2.N * R1.D;
+                R3.D = R1.D * R2.D;
                 break;
 
             case '*':
-                number1 = X[0] * Y[0];
-                number2 = X[1] * Y[1];
-                newNumerator = number1 / gcd(number1, number2);
-                newDenominator = number2 / gcd(number1, number2);
-                printf("%i/%i = %i/%i\n", number1, number2, newNumerator, newDenominator);
+                R3.N = R1.N * R2.N;
+                R3.D = R1.D * R2.D;
                 break;
 
             case '/':
-                number1 = X[0] * Y[1];
-                number2 = X[1] * Y[0];
-                newNumerator = number1 / gcd(number1, number2);
-                newDenominator = number2 / gcd(number1, number2);
-                printf("%i/%i = %i/%i\n", number1, number2, newNumerator, newDenominator);
+                R3.N = R1.N * R2.D;
+                R3.D = R1.D * R2.N;
                 break;
         }
+        result = simplifyRatio(R3);
+        printf("%d/%d = %d/%d\n", R3.N, R3.D, result.N, result.D);
     }
-
     return 0;
 }
-
