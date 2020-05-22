@@ -18,6 +18,7 @@
 typedef struct ratio{
     int N;
     int D;
+    int ERROR;
 } ratio;
 
 int commomDivisor(int numerator, int denominator)
@@ -36,6 +37,11 @@ int commomDivisor(int numerator, int denominator)
 
 ratio simplifyRatio(ratio r)
 {
+    if (r.N == 0) {
+        r.ERROR = -1;
+        return r;
+    }
+
     int resultCD = commomDivisor(r.N, r.D);
 
     r.N = r.N / resultCD;
@@ -49,10 +55,10 @@ int main()
     int N, i;
     char operator;
     ratio R1, R2, R3, result;
-    scanf("%d", &N);
+    scanf("%i", &N);
 
     for (i = 0; i < N; ++i) {
-        scanf("%d / %d %c %d / %d", &R1.N, &R1.D, &operator, &R2.N, &R2.D);
+        scanf("%i / %i %c %i / %i", &R1.N, &R1.D, &operator, &R2.N, &R2.D);
 
         switch (operator) {
             case '+':
@@ -76,7 +82,19 @@ int main()
                 break;
         }
         result = simplifyRatio(R3);
-        printf("%d/%d = %d/%d\n", R3.N, R3.D, result.N, result.D);
+
+        if (result.N > 0 && result.D > 0) {
+            printf("%i/%i = %i/%i\n", R3.N, R3.D, result.N, result.D);
+        } else {
+
+            if (result.N < 0 || result.D < 0) {
+                result.N = -result.N;
+                result.D = -result.D;
+            }
+
+            printf("%i/%i = %i/%i\n", R3.N, R3.D, result.N, result.D);
+        }
     }
+
     return 0;
 }
